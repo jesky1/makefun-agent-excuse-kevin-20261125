@@ -1,0 +1,1 @@
+{"description":"make.fun entry: the excuse an AI agent gives its human after shipping a bug (one line, under 200 characters)","engines":{"node":">=20"},"name":"makefun-agent-excuse-kevin-20261125","private":true,"scripts":{"start":"node main.ts","test":"node --test test.mjs"},"type":"module","version":"1.0.0"}
