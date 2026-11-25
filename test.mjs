@@ -27,7 +27,7 @@ test("the submitted line passes its own gate", () => {
 
 test("over-limit lines are rejected", () => {
   assert.match(validateLine("x".repeat(MAX_CHARS + 1)), /over the 200 limit/);
-  assert.equal(validateLine("x".repeat(MAX_CHARS)), null);
+  assert.equal(validateLine("x".repeat(MAX_CHARS - 1) + "."), null);
 });
 
 test("whitespace-only lines are rejected", () => {
@@ -44,6 +44,21 @@ test("multi-line text is rejected", () => {
 test("leading and trailing spaces are rejected", () => {
   assert.match(validateLine(" " + ENTRY), /leading or trailing space/);
   assert.match(validateLine(ENTRY + " "), /leading or trailing space/);
+});
+
+test("double spaces are rejected", () => {
+  assert.match(validateLine("a  b"), /double spaces/);
+  assert.match(validateLine(ENTRY.replace("bug —", "bug  —")), /double spaces/);
+});
+
+test("missing terminal punctuation is rejected", () => {
+  assert.match(validateLine("no punctuation here"), /terminal punctuation/);
+  assert.equal(validateLine(ENTRY.slice(0, -1) + "!"), null);
+});
+
+test("URLs are rejected", () => {
+  assert.match(validateLine("see https://example.com for details."), /must not contain a URL/);
+  assert.match(validateLine("visit www.example.com today."), /must not contain a URL/);
 });
 
 test("control characters are rejected", () => {
